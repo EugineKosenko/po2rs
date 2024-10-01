@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-01 13:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/api/sign_in.rs:27 src/api/sign_in.rs:32 src/api/sign_in.rs:27 src/api/sign_in.rs:32 src/api/sign_in.rs:27 src/api/sign_in.rs:32
+msgid "Invalid credentials"
+msgstr ""
+
+#: src/api.rs:59 src/api.rs:59
+msgid "I/O error"
+msgstr ""
+
+#: src/api.rs:60 src/api.rs:60
+msgid "Parse error in"
+msgstr ""
+
+#: src/api.rs:122 src/api.rs:122
+msgid "Auth is missing"
+msgstr ""
+
+#: src/api.rs:130 src/api.rs:130
+msgid "Auth type is invalid"
+msgstr ""
+
+#: src/api.rs:138 src/api.rs:138
+msgid "Auth token is expired"
+msgstr ""
+
+#: src/api.rs:145 src/api.rs:145
+msgid "Auth token is invalid"
+msgstr ""
+
+#: src/api.rs:163 src/api.rs:163
+msgid "Invalid user"
+msgstr ""
+
+#: src/api.rs:179 src/api.rs:179
+msgid "Unknown guard failure"
+msgstr ""
+
+#: src/bin/cli.rs:45
+msgid "Administrator"
+msgstr ""
+
+#: src/bin/cli.rs:45
+msgid "The user has the full access to the CRM system"
+msgstr ""
+
+#: src/bin/cli.rs:46
+msgid "Manager"
+msgstr ""
+
+#: src/bin/cli.rs:46
+msgid "Manager, card management"
+msgstr ""
+
+#: src/bin/cli.rs:47
+msgid "Director"
+msgstr ""
+
+#: src/bin/cli.rs:47
+msgid "The user has manager's, but not executor's permissions"
+msgstr ""
+
+#: src/bin/cli.rs:48
+msgid "Archive"
+msgstr ""
+
+#: src/bin/cli.rs:48
+msgid "Blocked users"
+msgstr ""

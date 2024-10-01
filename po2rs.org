@@ -1,0 +1,150 @@
+#+title: Перетворювач =po=-файлів на таблицю перекладів =yew=
+
+Перетворювач приймає в командному рядку перелік кодів мов через кому, наприклад, ~en,pl,uk~. Після цього
+він перебирає усі файли ~src/i18n/messages.<code>.po~ і створює файл ~src/i18n.rs~ з
+перекладами. Додатково в пустих перекладах підставляється ключ англійською мовою.
+
+* =Cargo=
+:PROPERTIES:
+:ID:       e83ea886-8ece-490b-bf92-23298ae76bb7
+:END:
+
+#+begin_src toml :noweb yes :tangle Cargo.toml
+  [package]
+  name = "po2rs"
+  version = "0.1.0"
+  edition = "2021"
+
+  # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+  [dependencies]
+  <<po2rs:Cargo:Залежності>>
+#+end_src
+
+  poreader = "*"
+
+* Головний файл
+:PROPERTIES:
+:ID:       414efab2-f1bc-4007-9b29-5382d8292c5d
+:END:
+
+#+begin_src rust :noweb yes :tangle src/main.rs
+  use std::env;
+  <<po2rs:Декларації>>
+
+  <<po2rs:Визначення>>
+
+  fn main() {
+      let args: Vec<String> = env::args().collect();
+      <<po2rs:Дії>>
+  }
+#+end_src
+
+* Обробка шаблону
+:PROPERTIES:
+:ID:       5fbad37f-855d-499f-8038-bcf4e4b7836b
+:END:
+
+Кінцевий файл генерується з шаблону =tera=.
+
+#+begin_src rust :noweb-ref po2rs:Cargo:Залежності
+  tera = "*"
+#+end_src
+
+#+begin_src rust :mkdirp yes :tangle templates/i18n.rs
+  lazy_static::lazy_static! {
+      pub static ref LANGUAGES: Vec<&'static str> = vec![
+          {% for lang in langs %}
+              "{{lang}}"{% if not loop.last %},{% endif %}
+          {% endfor %}
+      ];
+      pub static ref TRANSLATIONS: Vec<(String, serde_json::Value)> = vec![
+          {% for trans in trans %}
+              ("{{trans.0}}".to_string(), serde_json::json!({
+                  {% for item in trans.1 %}
+                      "{{item.0}}": "{{item.1}}"{% if not loop.last %},{% endif %}
+                  {% endfor %}
+              })){% if not loop.last %},{% endif %}
+          {% endfor %}
+      ];
+  }
+#+end_src
+
+Для робочої версії візьмемо шаблон за абсолютним розміщенням.
+
+#+begin_src rust :noweb-ref po2rs:Визначення
+  #[cfg(debug_assertions)]
+  const TEMPLATES: &str = "templates";
+
+  #[cfg(not(debug_assertions))]
+  const TEMPLATES: &str = "/usr/local/share/po2rs/templates";
+#+end_src
+
+#+begin_src rust :noweb-ref po2rs:Дії
+  let tera = tera::Tera::new(&format!("{}/*", TEMPLATES)).unwrap();
+  let mut ctx = tera::Context::new();
+#+end_src
+
+* Отримання переліку мов
+
+#+begin_src rust :noweb-ref po2rs:Дії
+  let langs = args[1].split(',').collect::<Vec<_>>();
+  ctx.insert("langs", &langs);
+#+end_src
+
+* Отримання перекладів
+
+Перебираємо в циклі мови. Для кожної мови відкриваємо =po=-файл і формуємо перелік елементів перекладу.
+
+#+begin_src rust :noweb yes :noweb-ref po2rs:Дії
+  ctx.insert("trans", &langs.iter().map(|lang| {
+      <<po2rs:Обробити-переклад>>
+     (lang, items)
+  }).collect::<Vec<_>>());
+#+end_src
+
+* Обробка перекладу
+
+Відкриваєемо файл та створюємо парсер.
+
+#+begin_src rust :noweb-ref po2rs:Cargo:Залежності
+  poreader = "*"
+#+end_src
+
+#+begin_src rust :noweb-ref po2rs:Обробити-переклад
+  let parser = poreader::PoParser::new();
+  let reader = parser.parse(fs::File::open(format!("src/i18n/messages.{}.po", lang)).unwrap()).unwrap();
+#+end_src
+
+Створюємо перелік елементів. Виключаємо елементи, які відсутні у додатку. Якщо переклад не вказано,
+використовуємо сам ключ у якості перекладу.
+
+#+begin_src rust :noweb-ref po2rs:Обробити-переклад
+  let mut items = Vec::new();
+  for unit in reader {
+      let unit = unit.unwrap();
+      if !unit.locations().is_empty() {
+          let message = unit.message();
+          items.push((
+              message.get_id().to_string(),
+              if message.get_text() == "" {
+                  message.get_id().to_string()
+              } else {
+                  message.get_text().to_string()
+              }))
+      }
+  }
+#+end_src
+
+* Збереження словника
+
+#+begin_src rust :noweb-ref po2rs:Декларації
+  use std::fs;
+  use std::io::Write;
+#+end_src
+
+#+begin_src rust :noweb-ref po2rs:Дії
+  fs::File::create("src/i18n.rs").unwrap()
+      .write_all(tera.render("i18n.rs", &ctx).unwrap().as_bytes()).unwrap();
+#+end_src
+

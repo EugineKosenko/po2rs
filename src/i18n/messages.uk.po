@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-07 11:21+0000\n"
+"PO-Revision-Date: 2024-06-07 14:21+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: src/main.rs:97
+msgid "Error"
+msgstr "Помилка"
+
+#: src/main.rs:98
+msgid "System Error"
+msgstr "Помилка системи"
+
+#: src/main.rs:99
+msgid "Unexpected error"
+msgstr "Неочікувана помилка"
+
+#: src/main.rs:104
+msgid "HTTP Error"
+msgstr "Помилка HTTP"
+
+#: src/main.rs:116
+msgid "E-mail"
+msgstr "E-mail"
+
+#: src/main.rs:128
+msgid "Password"
+msgstr "Пароль"
+
+#: src/main.rs:143
+msgid "Sign In"
+msgstr "Увійти"
+
+#: src/main.rs:158
+msgid "Sign Out"
+msgstr "Вийти"
+
+#~ msgid "Unknown error"
+#~ msgstr "Невідома помилка"
+
+#, fuzzy
+#~ msgid "Nick Name"
+#~ msgstr "Логін"
+
+#, fuzzy
+#~ msgid "Under Construction"
+#~ msgstr "В Розробці"
+
+#, fuzzy
+#~ msgid "CRM System"
+#~ msgstr "CRM-система"
+
+#, fuzzy
+#~ msgid "nickname"
+#~ msgstr "nickname"
+
+#, fuzzy
+#~ msgid "password"
+#~ msgstr "password"
